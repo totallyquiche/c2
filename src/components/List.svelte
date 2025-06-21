@@ -1,17 +1,23 @@
 <script lang="ts">
-    let list: string[] = $state([]);
+    interface Capture {
+        id: string;
+        created_at: string;
+        name: string;
+    }
+
+    let captures: Capture[] = $state([]);
 
     $effect(() => {
-        fetch('/list')
+        fetch('/captures')
             .then((response) => response.json())
             .then((data) => {
-                list = data;
+                captures = data as Capture[];
             });
     });
 </script>
 
 <ul class="flex flex-col gap-5">
-    {#each list as item}
-        <li>{item}</li>
+    {#each captures as capture}
+        <li>{capture.name}</li>
     {/each}
 </ul>
