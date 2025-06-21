@@ -2,16 +2,48 @@
     import type { Capture } from '$types/Capture';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
-    import Form from './Form.svelte';
+    import { writable } from 'svelte/store';
 
     const captures = getContext<Writable<Capture[]>>('captures');
+
+    let deleteQueue = writable(new Set<string>());
+
+    const handleDelete = async (capture: Capture) => {
+        if (!capture.id) return;
+
+        deleteQueue.update((queue) => {
+            queue.add(capture.id);
+            return queue;
+        });
+
+        const response = await fetch('?/delete', {
+            method: 'POST',
+            body: JSON.stringify({ capture })
+        });
+
+        if (response.ok) {
+            setTimeout(() => {
+                $captures = $captures.filter((c) => c.id !== capture.id);
+                deleteQueue.update((queue) => {
+                    queue.delete(capture.id);
+                    return queue;
+                });
+            }, 1000);
+        } else {
+            throw new Error('Failed to delete capture');
+        }
+    };
 </script>
 
 <ul class="flex flex-col gap-5">
     {#each $captures as capture, index (capture.id)}
         <li
-            class="text-light fade-in-item flex items-center justify-between gap-4"
-            style="animation-delay: {index * 150}ms;"
+            class="text-light flex items-center justify-between gap-4 self-center {$deleteQueue.has(
+                capture.id
+            )
+                ? 'fade-out-item'
+                : 'fade-in-item'}"
+            style="animation-delay: {$deleteQueue.has(capture.id) ? '0ms' : index * 150 + 'ms'};"
         >
             <span>{capture.name}</span>
             <form method="post" action="?/delete">
@@ -20,6 +52,10 @@
                     type="submit"
                     class="text-accent rounded px-3 py-1 text-sm hover:bg-red-50"
                     aria-label="Delete this capture"
+                    onclick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        capture.id && handleDelete(capture);
+                    }}
                 >
                     Release
                 </button>
@@ -34,14 +70,30 @@
         animation: fadeIn 0.6s ease-out forwards;
     }
 
+    .fade-out-item {
+        position: absolute;
+        animation: fadeOut 0.6s ease-out forwards;
+    }
+
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(0);
         }
         to {
             opacity: 1;
+            transform: translateY(20px);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
             transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
         }
     }
 </style>

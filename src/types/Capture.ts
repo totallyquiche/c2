@@ -1,5 +1,4 @@
 export interface Capture {
-    id?: string;
-    created_at?: string;
+    id: string;
     name: string;
 }

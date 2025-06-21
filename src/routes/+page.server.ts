@@ -21,14 +21,13 @@ export const actions: Actions = {
         }
     },
     delete: async ({ request }) => {
-        const formData = await request.formData();
-        const id = formData.get('id');
+        const { capture } = await request.json();
 
-        if (!id) {
+        if (!capture.id) {
             return fail(400, { message: 'Missing ID' });
         }
 
-        const { error } = await supabase.from('Captures').delete().eq('id', id);
+        const { error } = await supabase.from('Captures').delete().eq('id', capture.id);
 
         if (error) {
             console.error(error);
