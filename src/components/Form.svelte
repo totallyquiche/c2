@@ -1,27 +1,41 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import type { Capture } from '$types/Capture';
+    import { getContext, onMount } from 'svelte';
+    import type { Writable } from 'svelte/store';
 
     let form: HTMLFormElement;
     let input: HTMLInputElement;
 
+    const captures = getContext<Writable<Capture[]>>('captures');
+
     onMount(() => {
         input.focus();
 
-        form.onsubmit = (event: SubmitEvent) => {
+        form.onsubmit = async (event: SubmitEvent) => {
             event.preventDefault();
 
-            const value = input.value.trim();
+            const trimmedValue = input.value.trim();
 
+            if (!trimmedValue) {
+                return;
+            }
+
+            const body = new FormData(form);
             input.value = '';
 
-            fetch('/', {
-                method: 'POST',
-                body: new FormData(form)
-            }).catch(() => {
-                input.value = value;
-            });
+            try {
+                const response = await fetch('/', { method: 'POST', body });
 
-            input.focus();
+                if (response.ok) {
+                    $captures = [{ name: trimmedValue }, ...$captures];
+                } else {
+                    throw new Error('Failed to submit capture');
+                }
+            } catch (error) {
+                console.error('Error submitting capture:', error);
+            } finally {
+                input.focus();
+            }
         };
     });
 </script>
@@ -35,7 +49,9 @@
         bind:this={input}
     />
     <button
-        class="text-dark bg-accent focus:bg-accent cursor-pointer rounded-xl p-1 hover:brightness-95 active:scale-95"
-        >Submit</button
+        type="submit"
+        class="text-dark bg-accent focus:bg-accent cursor-pointer rounded-xl p-1 hover:brightness-95 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
     >
+        Capture
+    </button>
 </form>

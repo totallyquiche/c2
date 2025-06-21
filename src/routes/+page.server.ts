@@ -1,11 +1,18 @@
 import type { Actions } from '@sveltejs/kit';
+import { supabase } from '$lib/supabaseClient';
 
 export const actions: Actions = {
     default: async ({ request }) => {
         const formData = await request.formData();
+        const name = formData.get('capture');
+        const { error } = await supabase.from('Captures').insert({ name });
 
-        const capture = formData.get('capture');
+        if (error) {
+            return {
+                error: error.message
+            };
+        }
 
-        console.log(capture);
+        return { success: true };
     }
 } satisfies Actions;
