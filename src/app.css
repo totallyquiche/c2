@@ -2,15 +2,21 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+@font-face {
+    font-family: 'ToshibaSat';
+    src: url('/ToshibaSat_8x8.woff') format('woff');
+}
+
 @theme {
-	--color-dark: #01040e;
-	--color-light: #eff1e8;
-	--color-accent: #d9d760;
-	--color-background: var(--color-purple-500);
+    --color-dark: #01040e;
+    --color-light: #eff1e8;
+    --color-accent: #efed6a;
+    --color-background: var(--color-purple-500);
+    --font-mono: 'ToshibaSat', monospace;
 }
 
 @layer base {
-	body {
-		@apply text-dark;
-	}
+    body {
+        @apply text-dark font-mono;
+    }
 }
