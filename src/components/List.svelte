@@ -2,6 +2,7 @@
     import type { Capture } from '$types/Capture';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
+    import Form from './Form.svelte';
 
     const captures = getContext<Writable<Capture[]>>('captures');
 </script>
@@ -13,13 +14,16 @@
             style="animation-delay: {index * 150}ms;"
         >
             <span>{capture.name}</span>
-            <button
-                type="button"
-                class="text-accent rounded px-3 py-1 text-sm hover:bg-red-50"
-                aria-label="Delete {capture.name}"
-            >
-                Release
-            </button>
+            <form method="post" action="?/delete">
+                <input type="hidden" name="id" value={capture.id} />
+                <button
+                    type="submit"
+                    class="text-accent rounded px-3 py-1 text-sm hover:bg-red-50"
+                    aria-label="Delete this capture"
+                >
+                    Release
+                </button>
+            </form>
         </li>
     {/each}
 </ul>

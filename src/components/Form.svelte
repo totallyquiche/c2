@@ -35,7 +35,7 @@
             input.value = '';
 
             try {
-                const response = await fetch('/', { method: 'POST', body });
+                const response = await fetch('?/create', { method: 'POST', body });
 
                 if (response.ok) {
                     $captures = [capture, ...$captures];
