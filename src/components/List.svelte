@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Capture } from '$types/Capture';
-    import { getContext } from 'svelte';
+    import { getContext, onMount } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { writable } from 'svelte/store';
 
@@ -33,6 +33,22 @@
             throw new Error('Failed to delete capture');
         }
     };
+
+    onMount(() => {
+        fetch('/captures')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                captures.set(data as Capture[]);
+            })
+            .catch((error) => {
+                console.error('Error fetching captures:', error);
+            });
+    });
 </script>
 
 <ul class="flex min-w-1/2 flex-col">
