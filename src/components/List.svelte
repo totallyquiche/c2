@@ -71,8 +71,10 @@
     }
 
     .fade-out-item {
-        position: absolute;
-        animation: fadeOut 0.6s ease-out forwards;
+        margin-bottom: -3rem;
+        animation:
+            fadeOut 0.6s ease-out forwards,
+            margin-bottom 0.6s ease-out;
     }
 
     @keyframes fadeIn {
