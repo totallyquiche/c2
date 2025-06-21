@@ -1,13 +1,12 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
+/// <reference types="svelte-clerk/env" />
+
 declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
-	}
+    namespace App {
+        interface Locals {
+            auth: () => import('@clerk/backend').AuthObject;
+            currentUser: () => Promise<import('@clerk/backend').User | null>;
+        }
+    }
 }
 
 export {};

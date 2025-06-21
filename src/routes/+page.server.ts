@@ -2,7 +2,13 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { supabase } from '$lib/supabaseClient';
 
 export const actions: Actions = {
-    create: async ({ request }) => {
+    create: async ({ request, locals }) => {
+        const auth = locals.auth();
+
+        if (!auth.isAuthenticated) {
+            return fail(401, { message: 'Unauthorized' });
+        }
+
         try {
             const capture = await request.json();
             const { data, error } = await supabase
@@ -11,7 +17,6 @@ export const actions: Actions = {
 
             if (error) {
                 console.error(error);
-
                 throw new Error('Failed to create Capture');
             }
 
@@ -20,7 +25,13 @@ export const actions: Actions = {
             return fail(500, { message: error as string });
         }
     },
-    delete: async ({ request }) => {
+    delete: async ({ request, locals }) => {
+        const auth = locals.auth();
+
+        if (!auth.isAuthenticated) {
+            return fail(401, { message: 'Unauthorized' });
+        }
+
         const { capture } = await request.json();
 
         if (!capture.id) {
@@ -31,6 +42,7 @@ export const actions: Actions = {
 
         if (error) {
             console.error(error);
+            return fail(500, { message: 'Failed to delete capture' });
         }
     }
 } satisfies Actions;
