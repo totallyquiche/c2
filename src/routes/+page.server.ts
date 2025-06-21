@@ -1,18 +1,23 @@
-import type { Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { supabase } from '$lib/supabaseClient';
 
 export const actions: Actions = {
     default: async ({ request }) => {
-        const formData = await request.formData();
-        const name = formData.get('capture');
-        const { error } = await supabase.from('Captures').insert({ name });
+        try {
+            const capture = await request.json();
+            const { data, error } = await supabase
+                .from('Captures')
+                .insert({ id: capture.id, name: capture.name });
 
-        if (error) {
-            return {
-                error: error.message
-            };
+            if (error) {
+                console.error(error);
+
+                throw new Error('Failed to create Capture');
+            }
+
+            return data;
+        } catch (error: unknown) {
+            return fail(500, { message: error as string });
         }
-
-        return { success: true };
     }
 } satisfies Actions;

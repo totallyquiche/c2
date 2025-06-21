@@ -43,6 +43,7 @@
 		]
 	},
 	"dependencies": {
-		"@supabase/supabase-js": "^2.50.0"
+		"@supabase/supabase-js": "^2.50.0",
+		"uuid": "^11.1.0"
 	}
 }
