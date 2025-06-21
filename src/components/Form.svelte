@@ -62,7 +62,7 @@
         name="capture"
         type="text"
         placeholder="What?"
-        class="border-light bg-light border-0.5 p-2"
+        class="border-light bg-light border-0.5 placeholder:opacity-25"
         bind:this={input}
     />
     <button

@@ -35,10 +35,10 @@
     };
 </script>
 
-<ul class="flex flex-col">
+<ul class="flex min-w-1/2 flex-col">
     {#each $captures as capture, index (capture.id)}
         <li
-            class="text-light flex w-full items-center justify-between gap-4 self-center {$deleteQueue.has(
+            class="text-light flex w-full items-center justify-between gap-4 self-center py-2 {$deleteQueue.has(
                 capture.id
             )
                 ? 'fade-out-item'
@@ -50,7 +50,7 @@
                 <input type="hidden" name="id" value={capture.id} />
                 <button
                     type="submit"
-                    class="text-accent rounded px-3 py-1 text-sm hover:bg-red-50 {$deleteQueue.has(
+                    class="text-accent hover:text-dark focus:text-dark cursor-pointer {$deleteQueue.has(
                         capture.id
                     )
                         ? 'hidden'
@@ -77,6 +77,7 @@
     .fade-out-item {
         opacity: 1;
         max-height: 0;
+        padding: 0;
         animation: fadeOut 0.6s ease-out forwards;
     }
 
