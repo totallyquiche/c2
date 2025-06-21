@@ -35,10 +35,10 @@
     };
 </script>
 
-<ul class="flex flex-col gap-5">
+<ul class="flex flex-col">
     {#each $captures as capture, index (capture.id)}
         <li
-            class="text-light flex items-center justify-between gap-4 self-center {$deleteQueue.has(
+            class="text-light flex w-full items-center justify-between gap-4 self-center {$deleteQueue.has(
                 capture.id
             )
                 ? 'fade-out-item'
@@ -50,7 +50,11 @@
                 <input type="hidden" name="id" value={capture.id} />
                 <button
                     type="submit"
-                    class="text-accent rounded px-3 py-1 text-sm hover:bg-red-50"
+                    class="text-accent rounded px-3 py-1 text-sm hover:bg-red-50 {$deleteQueue.has(
+                        capture.id
+                    )
+                        ? 'hidden'
+                        : ''}"
                     aria-label="Delete this capture"
                     onclick={(event: MouseEvent) => {
                         event.preventDefault();
@@ -71,20 +75,19 @@
     }
 
     .fade-out-item {
-        margin-bottom: -3rem;
-        animation:
-            fadeOut 0.6s ease-out forwards,
-            margin-bottom 0.6s ease-out;
+        opacity: 1;
+        max-height: 0;
+        animation: fadeOut 0.6s ease-out forwards;
     }
 
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(0);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
-            transform: translateY(20px);
+            transform: translateY(0);
         }
     }
 
