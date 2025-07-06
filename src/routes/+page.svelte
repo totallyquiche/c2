@@ -10,7 +10,7 @@
 </script>
 
 <CapturesContext {captures}>
-    <div class="flex flex-col items-center gap-8 overflow-y-auto p-4 pt-16">
+    <div class="flex flex-col gap-4">
         <SignedOut>
             <SignInButton />
         </SignedOut>

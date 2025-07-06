@@ -51,24 +51,12 @@
     });
 </script>
 
-<form
-    method="post"
-    class="flex flex-col gap-4 {hidden
-        ? 'opacity-0'
-        : 'opacity-100'} transition-opacity duration-1500 ease-in-out"
-    bind:this={form}
->
+<form method="post" bind:this={form}>
     <input
         name="capture"
         type="text"
         placeholder="What?"
-        class="border-light bg-light border-0.5 placeholder:opacity-25"
         bind:this={input}
+        class="w-full border-0 bg-gray-800 ring-0"
     />
-    <button
-        type="submit"
-        class="text-dark bg-accent focus:bg-accent w-full cursor-pointer rounded-2xl p-1 hover:brightness-95 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
-    >
-        Capture
-    </button>
 </form>
