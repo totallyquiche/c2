@@ -48,6 +48,11 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Create non-root user for security
 RUN groupadd -r app && useradd -r -g app app
+
+# Create necessary directories and set permissions for the app user
+RUN mkdir -p /home/app/.cache/node/corepack/v1 && \
+    chown -R app:app /home/app
+
 USER app
 
 # Copy built output and runtime dependencies from builder
@@ -59,4 +64,4 @@ COPY --chown=app:app --from=builder /app/node_modules ./node_modules
 EXPOSE 3000
 
 # Start the SvelteKit Node server
-CMD ["pnpm", "start"]
+CMD ["node", "build/index.js"]
