@@ -28,9 +28,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the app
-RUN --mount=type=secret,id=envfile \
-    cp /run/secrets/envfile .env && \
-    pnpm build
+RUN pnpm build
 
 # Optional: remove dev dependencies to reduce image size
 RUN pnpm prune --prod
