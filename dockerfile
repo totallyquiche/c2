@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.4
+
 # ─────────────────────────────────────────────────────────────
 # STAGE 1: Build SvelteKit app using pnpm
 # ─────────────────────────────────────────────────────────────
@@ -25,8 +27,10 @@ RUN pnpm install --frozen-lockfile
 # Copy application source code
 COPY . .
 
-# Build the app (runs `svelte-kit build`)
-RUN pnpm build
+# Build the app
+RUN --mount=type=secret,id=envfile \
+    cp /run/secrets/envfile .env && \
+    pnpm build
 
 # Optional: remove dev dependencies to reduce image size
 RUN pnpm prune --prod
