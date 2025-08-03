@@ -18,8 +18,8 @@
             return queue;
         });
 
-        const response = await fetch('?/delete', {
-            method: 'POST',
+        const response = await fetch('/api/capture', {
+            method: 'DELETE',
             body: JSON.stringify({ capture })
         });
 
@@ -36,15 +36,16 @@
     };
 
     onMount(() => {
-        fetch('/captures')
-            .then((response) => {
+        fetch('/api/capture')
+            .then(async (response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
                 return response.json();
             })
             .then((data) => {
-                captures.set(data as Capture[]);
+                $captures = data;
             })
             .catch((error) => {
                 console.error('Error fetching captures:', error);
@@ -55,7 +56,7 @@
 <ul class="mx-2">
     {#each $captures as capture}
         <li class="flex items-center gap-2">
-            <form method="post" action="?/delete">
+            <form method="post" action="/api/capture">
                 <input type="hidden" name="id" value={capture.id} />
                 <button
                     type="submit"

@@ -31,15 +31,15 @@
             input.value = '';
 
             try {
-                const response = await fetch('?/create', { method: 'POST', body });
+                const response = await fetch('/api/capture', { method: 'POST', body });
 
                 if (response.ok) {
                     $captures = [capture, ...$captures];
                 } else {
-                    throw new Error('Failed to submit capture');
+                    throw new Error('Failed to create capture');
                 }
             } catch (error) {
-                console.error('Error submitting capture:', error);
+                console.error('Error creating capture:', error);
             } finally {
                 input.focus();
             }
@@ -47,7 +47,7 @@
     });
 </script>
 
-<form method="post" bind:this={form}>
+<form method="POST" bind:this={form}>
     <input
         name="capture"
         type="text"
