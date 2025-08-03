@@ -43,7 +43,7 @@ export const GET: RequestHandler = async (event: RequestEvent) => {
         const { data, error } = await supabase
             .from('Lists')
             .select()
-            .order('created_at', { ascending: false });
+            .order('order', { ascending: true });
 
         if (error) {
             return new Response('Failed to read lists', {

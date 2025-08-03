@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Capture } from '$types/Capture';
+    import CaptureCard from './CaptureCard.svelte';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { writable } from 'svelte/store';
@@ -40,30 +41,23 @@
     };
 </script>
 
-<ul class="mx-2">
-    {#each $captures.filter((c: Capture) => c.listId === list.id) as capture}
-        <li class="flex items-center gap-2">
-            <form method="post" action="/api/capture">
-                <input type="hidden" name="id" value={capture.id} />
-                <button
-                    type="submit"
-                    aria-label="Delete this capture"
-                    onclick={(event: MouseEvent) => {
-                        event.preventDefault();
-                        handleDelete(capture);
-                    }}
-                    class="text-gray-400 hover:text-gray-300 focus:text-gray-200 focus:outline-none active:text-gray-200"
-                >
-                    [X]
-                </button>
-            </form>
-            <input
-                name="capture"
-                type="text"
-                readonly
-                value={capture.name}
-                class="grow-1 border-0 bg-transparent focus:ring-0 focus:outline-none"
-            />
-        </li>
-    {/each}
-</ul>
+<section>
+    <div
+        class="flex items-center justify-between rounded-t-xs bg-green-300 px-4 py-2 font-semibold text-yellow-900"
+    >
+        <h2>{list.name}</h2>
+        <button
+            class="rounded-full p-2 text-xl hover:bg-green-400 focus:bg-green-400 active:bg-green-500"
+        >
+            +
+        </button>
+    </div>
+
+    <ul class="rounded-b-xs bg-green-200 pt-4 pb-8">
+        {#each $captures.filter((c: Capture) => c.listId === list.id) as capture}
+            <li class="p-2 px-4">
+                <CaptureCard {capture} {handleDelete} />
+            </li>
+        {/each}
+    </ul>
+</section>

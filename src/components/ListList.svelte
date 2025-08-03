@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { Writable } from 'svelte/store';
     import { getContext } from 'svelte';
-    import CapturesList from './CapturesList.svelte';
+    import CaptureCardList from './CaptureCardList.svelte';
     import type { List } from '$types/List';
     import { onMount } from 'svelte';
     import type { Capture } from '$types/Capture';
@@ -44,11 +44,10 @@
     });
 </script>
 
-<ul>
+<ul class="grid grid-cols-1 gap-4 p-4 lg:grid-cols-3">
     {#each $lists as list}
         <li>
-            <h2>{list.name}</h2>
-            <CapturesList {list} />
+            <CaptureCardList {list} />
         </li>
     {/each}
 </ul>
