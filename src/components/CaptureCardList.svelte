@@ -46,11 +46,11 @@
         class="flex items-center justify-between rounded-t-xs bg-green-300 px-4 py-2 font-semibold text-yellow-900"
     >
         <h2>{list.name}</h2>
-        <button
-            class="rounded-full p-2 text-xl hover:bg-green-400 focus:bg-green-400 active:bg-green-500"
-        >
-            +
-        </button>
+        <div>
+            <button class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400">
+                +
+            </button>
+        </div>
     </div>
 
     <ul class="rounded-b-xs bg-green-200 pt-4 pb-8">
