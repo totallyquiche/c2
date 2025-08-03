@@ -1,8 +1,10 @@
 <script lang="ts">
     import type { Capture } from '$types/Capture';
-    import { getContext, onMount } from 'svelte';
+    import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { writable } from 'svelte/store';
+
+    const { list } = $props();
 
     const captures = getContext<Writable<Capture[]>>('captures');
 
@@ -24,7 +26,9 @@
         });
 
         if (response.ok) {
-            $captures = $captures.filter((c) => c.id !== capture.id);
+            captures.update((captures: Capture[]) =>
+                captures.filter((c: Capture) => c.id !== capture.id)
+            );
 
             deleteQueue.update((queue) => {
                 queue.delete(capture.id);
@@ -34,27 +38,10 @@
             throw new Error('Failed to delete capture');
         }
     };
-
-    onMount(() => {
-        fetch('/api/capture')
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                return response.json();
-            })
-            .then((data) => {
-                $captures = data;
-            })
-            .catch((error) => {
-                console.error('Error fetching captures:', error);
-            });
-    });
 </script>
 
 <ul class="mx-2">
-    {#each $captures as capture}
+    {#each $captures.filter((c: Capture) => c.listId === list.id) as capture}
         <li class="flex items-center gap-2">
             <form method="post" action="/api/capture">
                 <input type="hidden" name="id" value={capture.id} />
