@@ -6,8 +6,19 @@
         handleDelete: (capture: Capture) => void;
     }>();
 
+    let newName = $state('');
+    let captureName = $state(capture.name);
     let isEditing = $state(false);
-    let newName = $state(capture.name);
+    let isDeleting = $state(false);
+
+    $effect(() => {
+        captureName = capture.name;
+    });
+
+    $effect(() => {
+        newName = captureName;
+        isEditing = !!(captureName.trim() === '');
+    });
 </script>
 
 <section
@@ -19,34 +30,52 @@
             bind:value={newName}
         ></textarea>
     {:else}
-        <p>{capture.name}</p>
+        <p>{captureName}</p>
     {/if}
     <div class="flex shrink-0 gap-0">
         {#if isEditing}
             <button
                 class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
                 onclick={() => {
-                    newName = capture.name;
+                    newName = captureName;
                     isEditing = false;
+
+                    if (newName.trim() === '') {
+                        handleDelete(capture);
+                    }
                 }}
             >
                 <img src="/images/thumbs-down.svg" alt="Cancel" class="size-5" />
             </button>
             <button
-                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 disabled:opacity-50"
                 onclick={() => {
-                    capture.name = newName;
+                    captureName = newName;
+                    capture.name = captureName;
                     isEditing = false;
                 }}
+                disabled={newName === captureName || newName.trim() === ''}
             >
                 <img src="/images/thumbs-up.svg" alt="Save" class="size-5" />
             </button>
         {:else}
             <button
                 class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
-                onclick={() => handleDelete(capture)}
+                onclick={() => {
+                    if (isDeleting) {
+                        handleDelete(capture);
+                    }
+
+                    isDeleting = !isDeleting;
+                }}
             >
-                <img src="/images/bomb.svg" alt="Delete" class="size-5" />
+                <img
+                    src={!isDeleting ? '/images/bomb.svg' : '/images/exclamation-question-mark.svg'}
+                    alt="Delete"
+                    class="size-5 transition-transform duration-300 {isDeleting
+                        ? '-rotate-25'
+                        : 'rotate-0'}"
+                />
             </button>
             <button
                 class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"

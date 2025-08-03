@@ -12,9 +12,12 @@
     let deleteQueue = writable(new Set<string>());
 
     const handleDelete = async (capture: Capture) => {
-        if (!capture.id) return;
-
-        if (!confirm('Are you sure you want to delete this capture?')) return;
+        if (!capture.id) {
+            captures.update((captures: Capture[]) =>
+                captures.filter((currentCapture: Capture) => currentCapture !== capture)
+            );
+            return;
+        }
 
         deleteQueue.update((queue) => {
             queue.add(capture.id);
@@ -47,14 +50,22 @@
     >
         <h2>{list.name}</h2>
         <div>
-            <button class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400">
+            <button
+                class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400"
+                onclick={() => {
+                    captures.update((captures: Capture[]) => [
+                        { id: '', name: '', listId: list.id } satisfies Capture,
+                        ...captures
+                    ]);
+                }}
+            >
                 +
             </button>
         </div>
     </div>
 
     <ul class="rounded-b-xs bg-green-200 pt-4 pb-8">
-        {#each $captures.filter((c: Capture) => c.listId === list.id) as capture}
+        {#each $captures.filter((c: Capture) => c.listId === list.id) as capture, index (capture.id || index)}
             <li class="p-2 px-4">
                 <CaptureCard {capture} {handleDelete} />
             </li>
