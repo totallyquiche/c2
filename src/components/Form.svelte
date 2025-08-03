@@ -9,11 +9,7 @@
 
     const captures = getContext<Writable<Capture[]>>('captures');
 
-    let hidden = $state(true);
-
     onMount(() => {
-        hidden = false;
-
         input.focus();
 
         form.onsubmit = async (event: SubmitEvent) => {
