@@ -15,9 +15,7 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
         const { data, error } = await supabase.from('Lists').insert(list);
 
         if (error) {
-            return new Response('Failed to create list', {
-                status: Number.parseInt(error.code)
-            });
+            throw new Error(error.message);
         }
 
         return new Response(JSON.stringify(data), {
@@ -46,9 +44,7 @@ export const GET: RequestHandler = async (event: RequestEvent) => {
             .order('order', { ascending: true });
 
         if (error) {
-            return new Response('Failed to read lists', {
-                status: Number.parseInt(error.code)
-            });
+            throw new Error(error.message);
         }
 
         return new Response(JSON.stringify(data), {
@@ -75,9 +71,7 @@ export const PUT: RequestHandler = async (event: RequestEvent) => {
         const { data, error } = await supabase.from('Lists').update(list).eq('id', list.id);
 
         if (error) {
-            return new Response('Failed to update list', {
-                status: Number.parseInt(error.code)
-            });
+            throw new Error(error.message);
         }
 
         return new Response(JSON.stringify(data), {
@@ -111,9 +105,7 @@ export const DELETE: RequestHandler = async (event: RequestEvent) => {
         const { error } = await supabase.from('Lists').delete().eq('id', list.id);
 
         if (error) {
-            return new Response('Failed to delete list', {
-                status: Number.parseInt(error.code)
-            });
+            throw new Error(error.message);
         }
 
         return new Response('List deleted', {

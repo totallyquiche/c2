@@ -43,6 +43,27 @@
             throw new Error('Failed to delete capture');
         }
     };
+
+    const handleCreate = async () => {
+        const newCapture = { id: uuidv4(), name: '', listId: list.id } satisfies Capture;
+
+        captures.update((captures: Capture[]) => [newCapture, ...captures]);
+    };
+
+    const handleUpsert = async (capture: Capture) => {
+        const response = await fetch('/api/capture', {
+            method: 'POST',
+            body: JSON.stringify(capture)
+        });
+
+        if (response.ok) {
+            captures.update((captures: Capture[]) =>
+                captures.map((c: Capture) => (c.id === capture.id ? capture : c))
+            );
+        } else {
+            throw new Error('Failed to update capture');
+        }
+    };
 </script>
 
 <section>
@@ -53,12 +74,7 @@
         <div>
             <button
                 class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400"
-                onclick={() => {
-                    captures.update((captures: Capture[]) => [
-                        { id: uuidv4(), name: '', listId: list.id } satisfies Capture,
-                        ...captures
-                    ]);
-                }}
+                onclick={handleCreate}
             >
                 +
             </button>
@@ -68,7 +84,7 @@
     <ul class="rounded-b-xs bg-green-200 pt-4 pb-8">
         {#each $captures.filter((c: Capture) => c.listId === list.id) as capture (capture.id)}
             <li class="p-2 px-4">
-                <CaptureCard {capture} {handleDelete} />
+                <CaptureCard {capture} {handleDelete} {handleUpsert} />
             </li>
         {/each}
     </ul>

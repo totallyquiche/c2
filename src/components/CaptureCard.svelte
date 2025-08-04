@@ -1,9 +1,10 @@
 <script lang="ts">
     import type { Capture } from '$types/Capture';
 
-    const { capture, handleDelete } = $props<{
+    const { capture, handleDelete, handleUpsert } = $props<{
         capture: Capture;
         handleDelete: (capture: Capture) => void;
+        handleUpsert: (capture: Capture) => void;
     }>();
 
     let newName = $state('');
@@ -52,6 +53,9 @@
                 onclick={() => {
                     captureName = newName;
                     capture.name = captureName;
+
+                    handleUpsert(capture);
+
                     isEditing = false;
                 }}
                 disabled={newName === captureName || newName.trim() === ''}
