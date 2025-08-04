@@ -77,12 +77,21 @@
                     class="size-5 transition-transform duration-300"
                 />
             </button>
-            <button
-                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
-                onclick={() => (isEditing = true)}
-            >
-                <img src="/images/pencil.svg" alt="Edit" class="size-5" />
-            </button>
+            {#if !isDeleting}
+                <button
+                    class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                    onclick={() => (isEditing = true)}
+                >
+                    <img src="/images/pencil.svg" alt="Edit" class="size-5" />
+                </button>
+            {:else}
+                <button
+                    class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                    onclick={() => (isDeleting = false)}
+                >
+                    <img src="/images/cancel.svg" alt="Cancel" class="size-5" />
+                </button>
+            {/if}
         {/if}
     </div>
 </section>
