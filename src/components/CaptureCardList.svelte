@@ -4,6 +4,8 @@
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { v4 as uuidv4 } from 'uuid';
+    import { dndzone } from 'svelte-dnd-action';
+    import { flip } from 'svelte/animate';
 
     const { list } = $props();
 
@@ -45,6 +47,16 @@
             throw new Error('Failed to update capture');
         }
     };
+
+    const handleConsider = (event: CustomEvent<{ items: Capture[] }>) => {
+        captures.update(() => event.detail.items);
+    };
+
+    const handleFinalize = (event: CustomEvent<{ items: Capture[] }>) => {
+        captures.update(() => event.detail.items);
+
+        // TODO: update the captures in the database
+    };
 </script>
 
 <section>
@@ -62,9 +74,14 @@
         </div>
     </div>
 
-    <ul class="rounded-b-xs bg-green-200 pt-4 pb-8">
-        {#each $captures.filter((c: Capture) => c.listId === list.id) as capture (capture.id)}
-            <li class="p-2 px-4">
+    <ul
+        class="rounded-b-xs bg-green-200 pt-4 pb-8"
+        use:dndzone={{ items: $captures }}
+        onconsider={handleConsider}
+        onfinalize={handleFinalize}
+    >
+        {#each $captures.filter((capture: Capture) => capture.listId === list.id) as capture (capture.id)}
+            <li class="m-2 mx-4" animate:flip={{ duration: 200 }}>
                 <CaptureCard {capture} {handleDelete} {handleUpsert} />
             </li>
         {/each}

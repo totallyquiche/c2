@@ -47,6 +47,7 @@
         "@supabase/supabase-js": "^2.50.0",
         "@sveltejs/adapter-node": "^5.2.12",
         "svelte-clerk": "^0.13.1",
+        "svelte-dnd-action": "^0.9.64",
         "uuid": "^11.1.0"
     }
 }

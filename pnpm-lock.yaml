@@ -17,6 +17,9 @@ importers:
       svelte-clerk:
         specifier: ^0.13.1
         version: 0.13.1(@sveltejs/kit@2.22.0(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.7)(vite@6.3.5(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.7)(vite@6.3.5(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)))(react@19.1.0)(svelte@5.34.7)
+      svelte-dnd-action:
+        specifier: ^0.9.64
+        version: 0.9.64(svelte@5.34.7)
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -1511,6 +1514,11 @@ packages:
       '@sveltejs/kit':
         optional: true
 
+  svelte-dnd-action@0.9.64:
+    resolution: {integrity: sha512-kbbnOTuVc+VINheraVyEQ7K11jXdQii6JNTGpsyIuwUqmda030eT3rPpqckD8UVh1DuyYH3xqyJDTWb8S610Jg==}
+    peerDependencies:
+      svelte: '>=3.23.0 || ^5.0.0-next.0'
+
   svelte-eslint-parser@1.2.0:
     resolution: {integrity: sha512-mbPtajIeuiyU80BEyGvwAktBeTX7KCr5/0l+uRGLq1dafwRNrjfM5kHGJScEBlPG3ipu6dJqfW/k0/fujvIEVw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -2960,6 +2968,10 @@ snapshots:
     transitivePeerDependencies:
       - react
       - react-dom
+
+  svelte-dnd-action@0.9.64(svelte@5.34.7):
+    dependencies:
+      svelte: 5.34.7
 
   svelte-eslint-parser@1.2.0(svelte@5.34.7):
     dependencies:
