@@ -60,7 +60,9 @@
             </button>
         {:else}
             <button
-                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 {isDeleting
+                    ? 'glitch'
+                    : ''}"
                 onclick={() => {
                     if (isDeleting) {
                         handleDelete(capture);
@@ -72,9 +74,7 @@
                 <img
                     src={!isDeleting ? '/images/bomb.svg' : '/images/exclamation-question-mark.svg'}
                     alt="Delete"
-                    class="size-5 transition-transform duration-300 {isDeleting
-                        ? '-rotate-25'
-                        : 'rotate-0'}"
+                    class="size-5 transition-transform duration-300"
                 />
             </button>
             <button
@@ -86,3 +86,42 @@
         {/if}
     </div>
 </section>
+
+<style>
+    .glitch:hover {
+        animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    }
+
+    @keyframes glitch {
+        0% {
+            transform: translate(0);
+            rotate: 0deg;
+            transform-origin: 50%;
+        }
+        20% {
+            transform: translate(-1px, 1px);
+            rotate: 10deg;
+            transform-origin: 50%;
+        }
+        40% {
+            transform: translate(-1px, -1px);
+            rotate: -10deg;
+            transform-origin: 50%;
+        }
+        60% {
+            transform: translate(1px, 1px);
+            rotate: 10deg;
+            transform-origin: 50%;
+        }
+        80% {
+            transform: translate(1px, -1px);
+            rotate: -10deg;
+            transform-origin: 50%;
+        }
+        100% {
+            transform: translate(0);
+            rotate: 0deg;
+            transform-origin: 50%;
+        }
+    }
+</style>
