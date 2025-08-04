@@ -3,48 +3,29 @@
     import CaptureCard from './CaptureCard.svelte';
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
-    import { writable } from 'svelte/store';
     import { v4 as uuidv4 } from 'uuid';
 
     const { list } = $props();
 
     const captures = getContext<Writable<Capture[]>>('captures');
 
-    let deleteQueue = writable(new Set<string>());
-
     const handleDelete = async (capture: Capture) => {
-        if (!capture.id) {
-            captures.update((captures: Capture[]) =>
-                captures.filter((currentCapture: Capture) => currentCapture.id !== capture.id)
-            );
-            return;
-        }
-
-        deleteQueue.update((queue) => {
-            queue.add(capture.id);
-            return queue;
-        });
+        captures.update((captures: Capture[]) =>
+            captures.filter((c: Capture) => c.id !== capture.id)
+        );
 
         const response = await fetch('/api/capture', {
             method: 'DELETE',
             body: JSON.stringify({ capture })
         });
 
-        if (response.ok) {
-            captures.update((captures: Capture[]) =>
-                captures.filter((c: Capture) => c.id !== capture.id)
-            );
-
-            deleteQueue.update((queue) => {
-                queue.delete(capture.id);
-                return queue;
-            });
-        } else {
+        if (!response.ok) {
+            captures.update((captures: Capture[]) => [...captures, capture]);
             throw new Error('Failed to delete capture');
         }
     };
 
-    const handleCreate = async () => {
+    const handleNew = async () => {
         const newCapture = { id: uuidv4(), name: '', listId: list.id } satisfies Capture;
 
         captures.update((captures: Capture[]) => [newCapture, ...captures]);
@@ -74,7 +55,7 @@
         <div>
             <button
                 class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400"
-                onclick={handleCreate}
+                onclick={handleNew}
             >
                 +
             </button>
