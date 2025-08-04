@@ -20,7 +20,7 @@
         });
 
         if (!response.ok) {
-            captures.update((captures: Capture[]) => [...captures, capture]);
+            captures.update((captures: Capture[]) => [capture, ...captures]);
             throw new Error('Failed to delete capture');
         }
     };
@@ -37,11 +37,11 @@
             body: JSON.stringify(capture)
         });
 
-        if (response.ok) {
-            captures.update((captures: Capture[]) =>
-                captures.map((c: Capture) => (c.id === capture.id ? capture : c))
-            );
-        } else {
+        captures.update((captures: Capture[]) =>
+            captures.map((c: Capture) => (c.id === capture.id ? capture : c))
+        );
+
+        if (!response.ok) {
             throw new Error('Failed to update capture');
         }
     };
