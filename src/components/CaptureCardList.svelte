@@ -4,6 +4,7 @@
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { writable } from 'svelte/store';
+    import { v4 as uuidv4 } from 'uuid';
 
     const { list } = $props();
 
@@ -14,7 +15,7 @@
     const handleDelete = async (capture: Capture) => {
         if (!capture.id) {
             captures.update((captures: Capture[]) =>
-                captures.filter((currentCapture: Capture) => currentCapture !== capture)
+                captures.filter((currentCapture: Capture) => currentCapture.id !== capture.id)
             );
             return;
         }
@@ -54,7 +55,7 @@
                 class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400"
                 onclick={() => {
                     captures.update((captures: Capture[]) => [
-                        { id: '', name: '', listId: list.id } satisfies Capture,
+                        { id: uuidv4(), name: '', listId: list.id } satisfies Capture,
                         ...captures
                     ]);
                 }}
@@ -65,7 +66,7 @@
     </div>
 
     <ul class="rounded-b-xs bg-green-200 pt-4 pb-8">
-        {#each $captures.filter((c: Capture) => c.listId === list.id) as capture, index (capture.id || index)}
+        {#each $captures.filter((c: Capture) => c.listId === list.id) as capture (capture.id)}
             <li class="p-2 px-4">
                 <CaptureCard {capture} {handleDelete} />
             </li>
