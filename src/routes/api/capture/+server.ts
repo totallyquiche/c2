@@ -1,5 +1,13 @@
 import type { RequestHandler, RequestEvent } from './$types';
 import { supabase } from '$lib/supabaseClient';
+import { z } from 'zod';
+
+const captureDto = z.object({
+    id: z.uuidv4(),
+    name: z.string(),
+    created_at: z.string(),
+    updated_at: z.string()
+});
 
 export const POST: RequestHandler = async (event: RequestEvent) => {
     const auth = event.locals.auth();
@@ -12,9 +20,12 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 
     try {
         const capture = await event.request.json();
+
+        const validatedCapture = captureDto.parse(capture);
+
         const { data, error } = await supabase
             .from('Captures')
-            .upsert(capture, {
+            .upsert(validatedCapture, {
                 onConflict: 'id'
             })
             .select()
@@ -74,14 +85,16 @@ export const DELETE: RequestHandler = async (event: RequestEvent) => {
 
     const { capture } = await event.request.json();
 
-    if (!capture.id) {
+    const validatedCapture = captureDto.parse(capture);
+
+    if (!validatedCapture.id) {
         return new Response('Missing ID', {
             status: 400
         });
     }
 
     try {
-        const { error } = await supabase.from('Captures').delete().eq('id', capture.id);
+        const { error } = await supabase.from('Captures').delete().eq('id', validatedCapture.id);
 
         if (error) {
             throw new Error(error.message);
