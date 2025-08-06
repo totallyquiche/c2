@@ -4,4 +4,5 @@ export interface Capture {
     listId: string;
     created_at?: string;
     updated_at?: string;
+    isEditing?: boolean;
 }

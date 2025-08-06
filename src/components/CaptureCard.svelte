@@ -9,16 +9,20 @@
 
     let newName = $state('');
     let captureName = $state(capture.name);
-    let isEditing = $state(false);
+    let isEditing = $state(capture.isEditing || false);
     let isDeleting = $state(false);
 
     $effect(() => {
         captureName = capture.name;
+        isEditing = capture.isEditing || false;
     });
 
     $effect(() => {
         newName = captureName;
-        isEditing = !!(captureName.trim() === '');
+    });
+
+    $effect(() => {
+        capture.isEditing = isEditing || !!(captureName.trim() === '');
     });
 </script>
 

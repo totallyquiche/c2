@@ -39,7 +39,7 @@
     };
 
     const handleNew = async () => {
-        const newCapture = { id: uuidv4(), name: '', listId: list.id } satisfies Capture;
+        const newCapture = { id: uuidv4(), name: '', listId: list.id, isEditing: true } satisfies Capture;
 
         captures.update((captures: Capture[]) => [newCapture, ...captures]);
     };

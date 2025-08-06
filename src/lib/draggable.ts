@@ -2,12 +2,21 @@ import type { Capture } from '$types/Capture';
 import type { Writable } from 'svelte/store';
 
 const handleDraggableDragStart = (event: DragEvent, captures: Capture[]) => {
+    const target = event.target as HTMLElement;
+    const captureId = target.dataset.captureId;
+    const capture = captures.find((capture: Capture) => capture.id === captureId);
+
+    if (!capture || capture.isEditing) {
+        event.preventDefault();
+        return;
+    }
+
     if (event.dataTransfer) {
         event.dataTransfer.effectAllowed = 'move';
 
         const data = {
             captures,
-            captureId: (event.target as HTMLElement).dataset.captureId
+            captureId
         };
 
         event.dataTransfer.setData('application/json', JSON.stringify(data));
