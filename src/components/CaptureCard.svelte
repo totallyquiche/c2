@@ -11,6 +11,7 @@
     let captureName = $state(capture.name);
     let isEditing = $state(capture.isEditing || false);
     let isDeleting = $state(false);
+    let textarea: HTMLTextAreaElement | null = $state(null);
 
     $effect(() => {
         captureName = capture.name;
@@ -24,6 +25,12 @@
     $effect(() => {
         capture.isEditing = isEditing || !!(captureName.trim() === '');
     });
+
+    $effect(() => {
+        if (textarea && isEditing) {
+            textarea.focus();
+        }
+    });
 </script>
 
 <section
@@ -33,6 +40,7 @@
         <textarea
             class="w-full resize-none rounded-xs bg-yellow-300 p-2 text-yellow-900"
             bind:value={newName}
+            bind:this={textarea}
         ></textarea>
     {:else}
         <p class="break-words hyphens-auto">{captureName}</p>
