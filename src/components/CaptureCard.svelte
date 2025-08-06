@@ -55,7 +55,7 @@
     <div class="flex shrink-0 gap-0">
         {#if isEditing}
             <button
-                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 cursor-pointer"
                 onclick={() => {
                     newName = captureName;
                     isEditing = false;
@@ -68,7 +68,7 @@
                 <img src="/images/thumbs-down.svg" alt="Cancel" class="size-5" />
             </button>
             <button
-                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 disabled:opacity-50"
+                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 disabled:opacity-50 cursor-pointer"
                 onclick={() => {
                     captureName = newName;
                     capture.name = captureName;
@@ -84,7 +84,7 @@
             </button>
         {:else}
             <button
-                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 {isDeleting
+                class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 cursor-pointer {isDeleting
                     ? 'glitch'
                     : ''}"
                 onclick={() => {
@@ -103,14 +103,14 @@
             </button>
             {#if !isDeleting}
                 <button
-                    class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                    class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 cursor-pointer"
                     onclick={() => (isEditing = true)}
                 >
                     <img src="/images/pencil.svg" alt="Edit" class="size-5" />
                 </button>
             {:else}
                 <button
-                    class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400"
+                    class="rounded-full p-2 hover:bg-yellow-300 active:bg-yellow-400 cursor-pointer"
                     onclick={() => (isDeleting = false)}
                 >
                     <img src="/images/cancel.svg" alt="Cancel" class="size-5" />

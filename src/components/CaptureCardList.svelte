@@ -67,7 +67,7 @@
         <h2>{list.name}</h2>
         <div>
             <button
-                class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400"
+                class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400 cursor-pointer"
                 onclick={handleNew}
             >
                 +
