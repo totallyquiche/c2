@@ -11,6 +11,12 @@
         handleDraggableDragStart,
         handleDraggableDragEnd
     } from '$lib/draggable';
+    import { browser } from '$app/environment';
+
+    if (browser) {
+        // @ts-ignore - drag-drop-touch has no type definitions
+        import('drag-drop-touch');
+    }
 
     const { list } = $props();
 
