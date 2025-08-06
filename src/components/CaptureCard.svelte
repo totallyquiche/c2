@@ -31,7 +31,7 @@
             bind:value={newName}
         ></textarea>
     {:else}
-        <p>{captureName}</p>
+        <p class="break-words hyphens-auto">{captureName}</p>
     {/if}
     <div class="flex shrink-0 gap-0">
         {#if isEditing}

@@ -47,7 +47,7 @@ export const GET: RequestHandler = async (event: RequestEvent) => {
         const { data, error } = await supabase
             .from('Captures')
             .select()
-            .order('created_at', { ascending: false });
+            .order('updated_at', { ascending: false });
 
         if (error) {
             throw new Error(error.message);

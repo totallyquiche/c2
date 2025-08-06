@@ -3,4 +3,5 @@ export interface Capture {
     name: string;
     listId: string;
     created_at?: string;
+    updated_at?: string;
 }

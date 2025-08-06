@@ -4,8 +4,13 @@
     import { getContext } from 'svelte';
     import type { Writable } from 'svelte/store';
     import { v4 as uuidv4 } from 'uuid';
-    import { dndzone } from 'svelte-dnd-action';
-    import { flip } from 'svelte/animate';
+    import {
+        handleDragTargetDragEnter,
+        handleDragTargetDragOver,
+        handleDragTargetDrop,
+        handleDraggableDragStart,
+        handleDraggableDragEnd
+    } from '$lib/draggable';
 
     const { list } = $props();
 
@@ -47,16 +52,6 @@
             throw new Error('Failed to update capture');
         }
     };
-
-    const handleConsider = (event: CustomEvent<{ items: Capture[] }>) => {
-        captures.update(() => event.detail.items);
-    };
-
-    const handleFinalize = (event: CustomEvent<{ items: Capture[] }>) => {
-        captures.update(() => event.detail.items);
-
-        // TODO: update the captures in the database
-    };
 </script>
 
 <section>
@@ -76,12 +71,20 @@
 
     <ul
         class="rounded-b-xs bg-green-200 pt-4 pb-8"
-        use:dndzone={{ items: $captures }}
-        onconsider={handleConsider}
-        onfinalize={handleFinalize}
+        ondragenter={handleDragTargetDragEnter}
+        ondragover={handleDragTargetDragOver}
+        ondrop={(event) => handleDragTargetDrop(event, captures, list.id, handleUpsert)}
     >
-        {#each $captures.filter((capture: Capture) => capture.listId === list.id) as capture (capture.id)}
-            <li class="m-2 mx-4" animate:flip={{ duration: 200 }}>
+        {#each $captures
+            .filter((capture: Capture) => capture.listId === list.id)
+            .sort( (a: Capture, b: Capture) => (b.updated_at || b.created_at || '').localeCompare(a.updated_at || a.created_at || '') ) as capture (capture.id)}
+            <li
+                class="m-2 mx-4"
+                draggable="true"
+                ondragstart={(event) => handleDraggableDragStart(event, $captures)}
+                ondragend={handleDraggableDragEnd}
+                data-capture-id={capture.id}
+            >
                 <CaptureCard {capture} {handleDelete} {handleUpsert} />
             </li>
         {/each}
