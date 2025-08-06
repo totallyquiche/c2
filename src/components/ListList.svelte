@@ -9,38 +9,30 @@
     const lists = getContext<Writable<List[]>>('lists');
     const captures = getContext<Writable<Capture[]>>('captures');
 
-    onMount(() => {
-        fetch('/api/list')
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+    onMount(async () => {
+        try {
+            const [listsResponse, capturesResponse] = await Promise.all([
+                fetch('/api/list'),
+                fetch('/api/capture')
+            ]);
 
-                return response.json();
-            })
-            .then((data) => {
-                lists.set(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching lists:', error);
-            });
-    });
+            if (!listsResponse.ok) {
+                throw new Error(`Lists API error: ${listsResponse.status}`);
+            }
+            if (!capturesResponse.ok) {
+                throw new Error(`Captures API error: ${capturesResponse.status}`);
+            }
 
-    onMount(() => {
-        fetch('/api/capture')
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+            const [listsData, capturesData] = await Promise.all([
+                listsResponse.json(),
+                capturesResponse.json()
+            ]);
 
-                return response.json();
-            })
-            .then((data) => {
-                captures.set(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching captures:', error);
-            });
+            lists.set(listsData);
+            captures.set(capturesData);
+        } catch (error) {
+            alert('Failed to fetch data');
+        }
     });
 </script>
 
