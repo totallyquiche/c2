@@ -83,7 +83,7 @@
     >
         {#each $captures
             .filter((capture: Capture) => capture.listId === list.id)
-            .sort( (a: Capture, b: Capture) => (b.updated_at || b.created_at || '').localeCompare(a.updated_at || a.created_at || '') ) as capture (capture.id)}
+            .sort( (a: Capture, b: Capture) => (b.updatedAt || b.createdAt || '').localeCompare(a.updatedAt || a.createdAt || '') ) as capture (capture.id)}
             <li
                 class="m-2 mx-4"
                 draggable="true"

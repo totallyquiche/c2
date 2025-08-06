@@ -61,7 +61,7 @@ const handleDragTargetDrop = (
                     };
 
                     if (handleUpsert && capture.listId !== targetListId) {
-                        updatedCapture.updated_at = new Date().toISOString();
+                        updatedCapture.updatedAt = new Date().toISOString();
                         handleUpsert(updatedCapture);
                     }
 

@@ -5,7 +5,8 @@ import { z } from 'zod';
 const captureDto = z.object({
     id: z.uuidv4(),
     name: z.string(),
-    listId: z.uuidv4()
+    listId: z.uuidv4(),
+    updatedAt: z.coerce.date()
 });
 
 export const POST: RequestHandler = async (event: RequestEvent) => {
@@ -57,7 +58,7 @@ export const GET: RequestHandler = async (event: RequestEvent) => {
         const { data, error } = await supabase
             .from('Captures')
             .select()
-            .order('updated_at', { ascending: false });
+            .order('updatedAt', { ascending: false });
 
         if (error) {
             throw new Error(error.message);
