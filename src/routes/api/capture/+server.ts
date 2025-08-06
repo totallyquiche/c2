@@ -5,8 +5,7 @@ import { z } from 'zod';
 const captureDto = z.object({
     id: z.uuidv4(),
     name: z.string(),
-    created_at: z.string(),
-    updated_at: z.string()
+    listId: z.uuidv4()
 });
 
 export const POST: RequestHandler = async (event: RequestEvent) => {
