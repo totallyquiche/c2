@@ -12,6 +12,7 @@
     let isEditing = $state(capture.isEditing || false);
     let isDeleting = $state(false);
     let textarea: HTMLTextAreaElement | null = $state(null);
+    let saveButton: HTMLButtonElement | null = $state(null);
 
     $effect(() => {
         captureName = capture.name;
@@ -41,6 +42,12 @@
             class="w-full resize-none rounded-xs bg-yellow-300 p-2 text-yellow-900"
             bind:value={newName}
             bind:this={textarea}
+            onkeydown={(e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    saveButton?.click();
+                }
+            }}
         ></textarea>
     {:else}
         <p class="break-words hyphens-auto">{captureName}</p>
@@ -71,6 +78,7 @@
                     isEditing = false;
                 }}
                 disabled={newName === captureName || newName.trim() === ''}
+                bind:this={saveButton}
             >
                 <img src="/images/thumbs-up.svg" alt="Save" class="size-5" />
             </button>
