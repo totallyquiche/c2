@@ -72,6 +72,7 @@
                 onclick={() => {
                     captureName = newName;
                     capture.name = captureName;
+                    capture.updatedAt = new Date().toISOString();
 
                     handleUpsert(capture);
 
