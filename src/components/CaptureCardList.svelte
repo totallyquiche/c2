@@ -39,7 +39,13 @@
     };
 
     const handleNew = async () => {
-        const newCapture = { id: uuidv4(), name: '', listId: list.id, isEditing: true } satisfies Capture;
+        const newCapture = {
+            id: uuidv4(),
+            name: '',
+            listId: list.id,
+            isEditing: true,
+            updatedAt: new Date().toISOString()
+        } satisfies Capture;
 
         captures.update((captures: Capture[]) => [newCapture, ...captures]);
     };
@@ -67,7 +73,7 @@
         <h2>{list.name}</h2>
         <div>
             <button
-                class="size-8 rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400 cursor-pointer"
+                class="size-8 cursor-pointer rounded-full text-lg hover:bg-yellow-300 active:bg-yellow-400"
                 onclick={handleNew}
             >
                 +
