@@ -52,15 +52,15 @@
 
     const handleUpsert = async (capture: Capture) => {
         const response = await fetch('/api/capture', {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify(capture)
         });
 
-        captures.update((captures: Capture[]) =>
-            captures.map((c: Capture) => (c.id === capture.id ? capture : c))
-        );
-
-        if (!response.ok) {
+        if (response.ok) {
+            captures.update((captures: Capture[]) =>
+                captures.map((c: Capture) => (c.id === capture.id ? capture : c))
+            );
+        } else {
             throw new Error('Failed to update capture');
         }
     };

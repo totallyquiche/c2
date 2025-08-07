@@ -9,7 +9,7 @@ const captureDto = z.object({
     updatedAt: z.coerce.date()
 });
 
-export const POST: RequestHandler = async (event: RequestEvent) => {
+export const PUT: RequestHandler = async (event: RequestEvent) => {
     const auth = event.locals.auth();
 
     if (!auth.isAuthenticated) {
